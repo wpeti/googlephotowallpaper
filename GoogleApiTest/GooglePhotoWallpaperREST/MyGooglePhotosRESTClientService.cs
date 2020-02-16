@@ -41,7 +41,12 @@ namespace GooglePhotoWallpaperREST
             return JsonConvert.DeserializeObject<GooglePhotosMediaItemsCollection>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<GooglePhotosAlbumsCollection> FetchAlbums(int pageSize = 0, string pageToken = "")
+        internal async Task<GooglePhotosAlbumsCollection> FetchAlbums(string nextPageToken)
+        {
+            return await FetchAlbums(20, nextPageToken);
+        }
+
+        public async Task<GooglePhotosAlbumsCollection> FetchAlbums(int pageSize = 20, string pageToken = "")
         {
             string url = @"https://photoslibrary.googleapis.com/v1/albums";
 

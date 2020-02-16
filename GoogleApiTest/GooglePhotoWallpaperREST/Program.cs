@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -70,11 +71,24 @@ namespace GooglePhotoWallpaperREST
             //    Console.WriteLine(mediaItem.Filename + " -- " + mediaItem.Id);
             //}
 
-            int i = 1;
-            GooglePhotosAlbumsCollection albums = await service.FetchAlbums();
-            foreach (var anAlbum in albums.albums)
+            int albumCount = 1;
+            string tmpFile = string.Empty;
+            GooglePhotosAlbumsCollection albums = new GooglePhotosAlbumsCollection();
+
+            using (WebClient downloader = new WebClient())
             {
-                Console.WriteLine(i++ + ". " + anAlbum.title + " -- " + anAlbum.id);
+                do
+                {
+                    albums = await service.FetchAlbums(albums.nextPageToken);
+
+                    foreach (var anAlbum in albums.albums)
+                    {
+                        tmpFile = @"C:\tmp\" + /*anAlbum.title +*/ "_" + albumCount + ".png";
+                        Console.WriteLine(albumCount++ + ". " + anAlbum.title + " -- " + tmpFile + "--" + anAlbum.id);
+                        downloader.DownloadFile(new Uri(anAlbum.coverPhotoBaseUrl), tmpFile);
+                    }
+                }
+                while (!string.IsNullOrEmpty(albums.nextPageToken));
             }
         }
     }
