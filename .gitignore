@@ -3,3 +3,12 @@
 ################################################################################
 
 /GoogleApiTest/GoogleApiTest/obj
+/GoogleApiTest/GoogleApiTest/bin/Debug/netcoreapp2.1
+/GoogleApiTest/GooglePhotoWallpaperREST/bin/Debug/netcoreapp2.1
+/GoogleApiTest/GooglePhotoWallpaperREST/obj
+/GoogleApiTest/GooglePhotoWallpaperREST/creds.json
+/.vs/googlephotowallpaper/v16
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/GoogleApiTest/.vs/GoogleApiTest/v16

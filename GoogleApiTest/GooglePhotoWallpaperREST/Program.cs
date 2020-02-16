@@ -9,6 +9,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+//installation steps
+// host file "C:\Windows\System32\drivers\etc\hosts" needs to have "	127.0.0.1       localhost" line. To edit host file, elevated permissions required
+
 namespace GooglePhotoWallpaperREST
 {
     /// <summary>
@@ -61,18 +64,18 @@ namespace GooglePhotoWallpaperREST
                 GZipEnabled = false,
             });
 
-            var response = await service.HttpClient.GetAsync(@"https://photoslibrary.googleapis.com/v1/albums");
-            response.EnsureSuccessStatusCode();
+            //GooglePhotosMediaItemsCollection mediaItems = await service.ListMediaItems(1);
+            //foreach (var mediaItem in mediaItems.mediaItems)
+            //{
+            //    Console.WriteLine(mediaItem.Filename + " -- " + mediaItem.Id);
+            //}
 
-            string result = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(result);
-
-            var albums = JsonConvert.DeserializeObject<GooglePhotosAlbumsCollection>(result);
-
-            Console.WriteLine("deserialized");
-
-            //var bookshelves = await service.Mylibrary.Bookshelves.List().ExecuteAsync();
-
+            int i = 1;
+            GooglePhotosAlbumsCollection albums = await service.FetchAlbums();
+            foreach (var anAlbum in albums.albums)
+            {
+                Console.WriteLine(i++ + ". " + anAlbum.title + " -- " + anAlbum.id);
+            }
         }
     }
 }

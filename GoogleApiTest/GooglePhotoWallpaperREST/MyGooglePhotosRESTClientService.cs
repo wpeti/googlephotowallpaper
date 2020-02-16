@@ -1,4 +1,5 @@
 ﻿using Google.Apis.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,5 +19,81 @@ namespace GooglePhotoWallpaperREST
         public override string BasePath => throw new NotImplementedException();
 
         public override IList<string> Features => throw new NotImplementedException();
+
+
+        public async Task<GooglePhotosMediaItemsCollection> ListMediaItems(int pageSize = 0, string pageToken = "")
+        {
+            string url = @"https://photoslibrary.googleapis.com/v1/mediaItems";
+
+            if (pageSize > 0)
+            {
+                url = ExtendUrlWithPageSize(url, pageSize);
+            }
+            if (!string.IsNullOrEmpty(pageToken))
+            {
+                url = ExtendUrlWithPageToken(url, pageToken);
+            }
+
+            var response = await base.HttpClient.GetAsync(url);
+
+            response.EnsureSuccessStatusCode();
+
+            return JsonConvert.DeserializeObject<GooglePhotosMediaItemsCollection>(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<GooglePhotosAlbumsCollection> FetchAlbums(int pageSize = 0, string pageToken = "")
+        {
+            string url = @"https://photoslibrary.googleapis.com/v1/albums";
+
+            if (pageSize > 0)
+            {
+                url = ExtendUrlWithPageSize(url, pageSize);
+            }
+            if (!string.IsNullOrEmpty(pageToken))
+            {
+                url = ExtendUrlWithPageToken(url, pageToken);
+            }
+                
+            var response = await base.HttpClient.GetAsync(url);
+
+            response.EnsureSuccessStatusCode();
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<GooglePhotosAlbumsCollection>(content);
+        }
+
+        private string ExtendUrlWithPageToken(string url, string pageToken)
+        {
+            return ExtendUrlWithParameter(url, "pageToken", pageToken);
+        }
+
+        private string ExtendUrlWithPageSize(string url, int pageSize)
+        {
+            return ExtendUrlWithParameter(url, "pageSize", pageSize.ToString());
+        }
+
+        private string ExtendUrlWithParameter(string url, string parameterName, string parameterValue)
+        {
+            url = AppendOperandSign(url);
+
+            url += parameterName + "=" + parameterValue;
+
+            return url;
+        }
+
+        private string AppendOperandSign(string url)
+        {
+            if (!url.Contains("?"))
+            {
+                url += "?";
+            }
+            else
+            {
+                url += "&";
+            }
+
+            return url;
+        }
     }
 }
