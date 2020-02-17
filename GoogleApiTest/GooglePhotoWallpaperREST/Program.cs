@@ -1,10 +1,7 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using Newtonsoft;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -86,7 +83,7 @@ namespace GooglePhotoWallpaperREST
                         tmpFile = @"C:\tmp\" + /*anAlbum.title +*/ "_" + albumCount + ".png";
                         Console.WriteLine(albumCount++ + ". " + anAlbum.title + " -- " + tmpFile + "--" + anAlbum.id);
                         downloader.DownloadFile(new Uri(anAlbum.coverPhotoBaseUrl), tmpFile);
-
+                        //Console.WriteLine(Wallpaper.Wallpaper.Get());
                         Wallpaper.Wallpaper.Set(new Uri(anAlbum.coverPhotoBaseUrl), Wallpaper.Wallpaper.Style.Centered);
                     }
                 }

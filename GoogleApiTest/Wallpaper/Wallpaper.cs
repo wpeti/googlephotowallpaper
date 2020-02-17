@@ -40,6 +40,7 @@ namespace Wallpaper
                     img.Save(tempPath, System.Drawing.Imaging.ImageFormat.Bmp);
                 }
             }
+
             RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true);
             if (style == Style.Stretched)
             {
@@ -63,6 +64,26 @@ namespace Wallpaper
                 0,
                 tempPath,
                 SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
+        }
+
+        public static string Get()
+        {
+            string desktopImgPath = string.Empty;
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop"))
+            {
+                if (key != null)
+                {
+                    Object o = key.GetValue("WallPaper");
+                    if (o != null)
+                    {
+                        desktopImgPath = o as String;  //"as" because it's REG_SZ...otherwise ToString() might be safe(r)
+                                                                     //do what you like with version
+                    }
+                }
+            }
+
+            return desktopImgPath;
         }
     }
 }
