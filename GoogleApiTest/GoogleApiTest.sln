@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GooglePhotoWallpaperREST", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GooglePhotoWallpaperGUI", "GooglePhotoWallpaperGUI\GooglePhotoWallpaperGUI.csproj", "{0A9F45E5-9C35-45A2-A8DD-C2DB9C9EF4B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wallpaper", "Wallpaper\Wallpaper.csproj", "{FBB3DE43-CC47-4532-B8DE-62F6E6BA1E83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0A9F45E5-9C35-45A2-A8DD-C2DB9C9EF4B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A9F45E5-9C35-45A2-A8DD-C2DB9C9EF4B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A9F45E5-9C35-45A2-A8DD-C2DB9C9EF4B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB3DE43-CC47-4532-B8DE-62F6E6BA1E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB3DE43-CC47-4532-B8DE-62F6E6BA1E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB3DE43-CC47-4532-B8DE-62F6E6BA1E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB3DE43-CC47-4532-B8DE-62F6E6BA1E83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

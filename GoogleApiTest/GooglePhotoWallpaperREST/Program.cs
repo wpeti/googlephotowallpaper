@@ -86,6 +86,8 @@ namespace GooglePhotoWallpaperREST
                         tmpFile = @"C:\tmp\" + /*anAlbum.title +*/ "_" + albumCount + ".png";
                         Console.WriteLine(albumCount++ + ". " + anAlbum.title + " -- " + tmpFile + "--" + anAlbum.id);
                         downloader.DownloadFile(new Uri(anAlbum.coverPhotoBaseUrl), tmpFile);
+
+                        Wallpaper.Wallpaper.Set(new Uri(anAlbum.coverPhotoBaseUrl), Wallpaper.Wallpaper.Style.Centered);
                     }
                 }
                 while (!string.IsNullOrEmpty(albums.nextPageToken));

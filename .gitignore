@@ -13,3 +13,5 @@
 /.vs/VSWorkspaceState.json
 /GoogleApiTest/.vs/GoogleApiTest/v16
 /GoogleApiTest/GooglePhotoWallpaperGUI/obj/Debug
+/GoogleApiTest/Wallpaper/bin/Debug/netstandard2.0
+/GoogleApiTest/Wallpaper/obj

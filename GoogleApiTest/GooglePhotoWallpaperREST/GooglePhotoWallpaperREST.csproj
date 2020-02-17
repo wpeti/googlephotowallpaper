@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Wallpaper\Wallpaper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="creds.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
