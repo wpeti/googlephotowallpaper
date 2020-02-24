@@ -25,18 +25,25 @@ namespace GooglePhotoWallpaperREST
         {
             string url = @"https://photoslibrary.googleapis.com/v1/mediaItems:search";
 
-            var values = new Dictionary<string, string>
-            {
-                { "pageToken", pageToken },
-                { "pageSize", pageSize.ToString() },
-                { "filters",  "{featureFilter: { includedFeatures: [FAVORITES]}}"}
-            };
+            string json = JsonConvert.SerializeObject(
+                new
+                {
+                    pageSize = pageSize.ToString(),
+                    pageToken = pageToken,
+                    filters = new
+                    {
+                        mediaTypeFilter = new
+                        {
+                            mediaTypes = new[] { "PHOTO" }
+                        }
+                    }
+                });
 
-            FormUrlEncodedContent content = new FormUrlEncodedContent(values);
-
+            StringContent content = new StringContent(json);
+            
             var response = await base.HttpClient.PostAsync(url, content);
 
-            response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
 
             return JsonConvert.DeserializeObject<GooglePhotosMediaItemsCollection>(await response.Content.ReadAsStringAsync());
         }

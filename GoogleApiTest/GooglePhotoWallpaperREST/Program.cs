@@ -31,6 +31,7 @@ namespace GooglePhotoWallpaperREST
             }
             catch (AggregateException ex)
             {
+                Console.WriteLine(ex.ToString());
                 foreach (var e in ex.InnerExceptions)
                 {
                     Console.WriteLine("ERROR: " + e.Message);
