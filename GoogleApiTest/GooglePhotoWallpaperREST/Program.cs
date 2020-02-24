@@ -70,26 +70,49 @@ namespace GooglePhotoWallpaperREST
 
             int albumCount = 1;
             string tmpFile = string.Empty;
-            GooglePhotosAlbumsCollection albums = new GooglePhotosAlbumsCollection();
+            //GooglePhotosAlbumsCollection albums = new GooglePhotosAlbumsCollection();
 
-            using (WebClient downloader = new WebClient())
-            {
+            //using (WebClient downloader = new WebClient())
+            //{
+            //    do
+            //    {
+            //        albums = await service.FetchAlbums(albums.nextPageToken);
+
+            //        foreach (var anAlbum in albums.albums)
+            //        {
+            //            tmpFile = @"C:\tmp\" + /*anAlbum.title +*/ "_" + albumCount + ".png";
+            //            Console.WriteLine(albumCount++ + ". " + anAlbum.title + " -- " + tmpFile + "--" + anAlbum.id);
+            //            downloader.DownloadFile(new Uri(anAlbum.coverPhotoBaseUrl), tmpFile);
+            //            //Console.WriteLine(Wallpaper.Wallpaper.Get());
+            //            Wallpaper.Wallpaper.Set(new Uri(anAlbum.coverPhotoBaseUrl), Wallpaper.Wallpaper.Style.Centered);
+            //        }
+            //    }
+            //    while (!string.IsNullOrEmpty(albums.nextPageToken));
+            //}
+
+            int mediaItemCount = 1;
+            GooglePhotosMediaItemsCollection medias = new GooglePhotosMediaItemsCollection();
+
+            
                 do
                 {
-                    albums = await service.FetchAlbums(albums.nextPageToken);
+                    medias = await service.SearchMediaItems(100, medias.nextPageToken);
 
-                    foreach (var anAlbum in albums.albums)
+                    foreach (var aMediaItem in medias.mediaItems)
                     {
                         tmpFile = @"C:\tmp\" + /*anAlbum.title +*/ "_" + albumCount + ".png";
-                        Console.WriteLine(albumCount++ + ". " + anAlbum.title + " -- " + tmpFile + "--" + anAlbum.id);
-                        downloader.DownloadFile(new Uri(anAlbum.coverPhotoBaseUrl), tmpFile);
+                        Console.WriteLine(mediaItemCount++ + ". " + aMediaItem.Filename + " -- " + tmpFile + " -- " + aMediaItem.ProductUrl.ToString());
+                        //downloader.DownloadFile(aMediaItem.BaseUrl+"=w1600-900", tmpFile);
                         //Console.WriteLine(Wallpaper.Wallpaper.Get());
-                        Wallpaper.Wallpaper.Set(new Uri(anAlbum.coverPhotoBaseUrl), Wallpaper.Wallpaper.Style.Centered);
+                        Wallpaper.Wallpaper.Set(new Uri(aMediaItem.BaseUrl.AbsoluteUri+"=w1600-h900"), Wallpaper.Wallpaper.Style.Tiled);
+                    Thread.Sleep(1000);
                     }
                 }
-                while (!string.IsNullOrEmpty(albums.nextPageToken));
-            }
+                while (!string.IsNullOrEmpty(medias.nextPageToken));
+            
         }
+
+        
     }
 }
 

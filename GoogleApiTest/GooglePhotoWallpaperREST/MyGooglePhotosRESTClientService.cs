@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,26 @@ namespace GooglePhotoWallpaperREST
         public override string BasePath => throw new NotImplementedException();
 
         public override IList<string> Features => throw new NotImplementedException();
+
+        public async Task<GooglePhotosMediaItemsCollection> SearchMediaItems(int pageSize = 0, string pageToken = "")
+        {
+            string url = @"https://photoslibrary.googleapis.com/v1/mediaItems:search";
+
+            var values = new Dictionary<string, string>
+            {
+                { "pageToken", pageToken },
+                { "pageSize", pageSize.ToString() },
+                { "filters",  "{featureFilter: { includedFeatures: [FAVORITES]}}"}
+            };
+
+            FormUrlEncodedContent content = new FormUrlEncodedContent(values);
+
+            var response = await base.HttpClient.PostAsync(url, content);
+
+            response.EnsureSuccessStatusCode();
+
+            return JsonConvert.DeserializeObject<GooglePhotosMediaItemsCollection>(await response.Content.ReadAsStringAsync());
+        }
 
 
         public async Task<GooglePhotosMediaItemsCollection> ListMediaItems(int pageSize = 0, string pageToken = "")
