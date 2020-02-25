@@ -21,25 +21,35 @@ namespace GooglePhotoWallpaperREST
 
         public override IList<string> Features => throw new NotImplementedException();
 
-        public async Task<GooglePhotosMediaItemsCollection> SearchMediaItems(int pageSize = 0, string pageToken = "")
+        public async Task<GooglePhotosMediaItemsCollection> SearchFavoredPhotos(int pageSize = 0, string pageToken = "")
+        {
+            object filterCriteria = new
+            {
+                mediaTypeFilter = new
+                {
+                    mediaTypes = new[] { "PHOTO" }
+                },
+                featureFilter = new
+                {
+                    includedFeatures = new[] { "FAVORITES" }
+                }
+            };
+
+            return await SearchMediaItems(filterCriteria, pageSize, pageToken);
+        }
+        public async Task<GooglePhotosMediaItemsCollection> SearchMediaItems(object filterCriteria, int pageSize = 0, string pageToken = "")
         {
             string url = @"https://photoslibrary.googleapis.com/v1/mediaItems:search";
 
-            string json = JsonConvert.SerializeObject(
+            string searchCriteria = JsonConvert.SerializeObject(
                 new
                 {
                     pageSize = pageSize.ToString(),
                     pageToken = pageToken,
-                    filters = new
-                    {
-                        mediaTypeFilter = new
-                        {
-                            mediaTypes = new[] { "PHOTO" }
-                        }
-                    }
+                    filters = filterCriteria
                 });
 
-            StringContent content = new StringContent(json);
+            StringContent content = new StringContent(searchCriteria);
             
             var response = await base.HttpClient.PostAsync(url, content);
 
@@ -47,7 +57,6 @@ namespace GooglePhotoWallpaperREST
 
             return JsonConvert.DeserializeObject<GooglePhotosMediaItemsCollection>(await response.Content.ReadAsStringAsync());
         }
-
 
         public async Task<GooglePhotosMediaItemsCollection> ListMediaItems(int pageSize = 0, string pageToken = "")
         {

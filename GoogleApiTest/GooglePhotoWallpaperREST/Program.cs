@@ -97,7 +97,7 @@ namespace GooglePhotoWallpaperREST
             
                 do
                 {
-                    medias = await service.SearchMediaItems(100, medias.nextPageToken);
+                    medias = await service.SearchFavoredPhotos(100, medias.nextPageToken);
 
                     foreach (var aMediaItem in medias.mediaItems)
                     {
