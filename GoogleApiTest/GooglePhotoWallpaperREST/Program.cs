@@ -68,6 +68,9 @@ namespace GooglePhotoWallpaperREST
             //{
             //    Console.WriteLine(mediaItem.Filename + " -- " + mediaItem.Id);
             //}
+            SlideshowSettings slideshowSettings = new SlideshowSettings();
+            slideshowSettings.displayFavorites = true;
+            
 
             int albumCount = 0;
             string tmpFile = string.Empty;
@@ -78,6 +81,7 @@ namespace GooglePhotoWallpaperREST
             foreach (var anAlbum in albums.albums)
             {
                 Console.WriteLine("{0}) {1}", albumCount++, anAlbum.title);
+                slideshowSettings.selectedAlbumIds.Add(anAlbum.id);
             }
 
 
@@ -88,10 +92,8 @@ namespace GooglePhotoWallpaperREST
                 Console.WriteLine("{0}) {1}", mediaItemCount++, media.Filename);
             }
 
-
+            slideshowSettings.SaveSettings();
         }
-
-        
     }
 }
 
