@@ -33,62 +33,71 @@ namespace GooglePhotoWallpaperREST
 
                 allFavoredPhotos.mediaItems.AddRange(mediasCache.mediaItems);
                 allFavoredPhotos.nextPageToken = mediasCache.nextPageToken;
-
-                //foreach (var aMediaItem in mediasCache.mediaItems)
-                //{
-                //    tmpFile = @"C:\tmp\" + /*anAlbum.title +*/ "_" + mediaItemCount + ".png";
-                //    Console.WriteLine(mediaItemCount++ + ". " + aMediaItem.Filename + " -- " + tmpFile + " -- " + aMediaItem.ProductUrl.ToString());
-                //    downloader.DownloadFile(aMediaItem.BaseUrl + "=w1600-900", tmpFile);
-                //    Console.WriteLine(Wallpaper.Wallpaper.Get());
-                //    Wallpaper.Wallpaper.Set(new Uri(aMediaItem.BaseUrl.AbsoluteUri + "=w1600-h900"), Wallpaper.Wallpaper.Style.Tiled);
-                //    Thread.Sleep(1000);
-                //}
             }
             while (!string.IsNullOrEmpty(mediasCache.nextPageToken));
 
             return mediasCache;
         }
 
+        public async Task<GooglePhotosMediaItemsCollection> FetchAllPhotosOfAlbum(string albumID)
+        {
+            GooglePhotosMediaItemsCollection googlePhotosMediaItemsCollection = new GooglePhotosMediaItemsCollection() { mediaItems = new List<GooglePhotosMediaItem>()};
+            GooglePhotosMediaItemsCollection cacheGooglePhotosMediaItemsCollection = new GooglePhotosMediaItemsCollection();
+
+            do
+            {
+                cacheGooglePhotosMediaItemsCollection = await FetchPhotosOfAlbum(albumID, 100, cacheGooglePhotosMediaItemsCollection.nextPageToken);
+
+                if (cacheGooglePhotosMediaItemsCollection.mediaItems.Count != 0)
+                    googlePhotosMediaItemsCollection.mediaItems.AddRange(cacheGooglePhotosMediaItemsCollection.mediaItems);
+
+                googlePhotosMediaItemsCollection.nextPageToken = cacheGooglePhotosMediaItemsCollection.nextPageToken;
+
+            } while (!string.IsNullOrEmpty(cacheGooglePhotosMediaItemsCollection.nextPageToken)) ;
+
+
+            return googlePhotosMediaItemsCollection;
+        }
+
         public async Task<GooglePhotosMediaItemsCollection> FetchPhotosOfAlbum(string albumID, int pageSize = 0, string pageToken = "")
         {
-            object filterCriteria = new
+            string searchCriteria = JsonConvert.SerializeObject(new
             {
-                albumId = albumID,
-                mediaTypeFilter = new
-                {
-                    mediaTypes = new[] { "PHOTO" }
-                }
-            };
+                pageSize = pageSize.ToString(),
+                pageToken = pageToken,
+                albumId = albumID
+            });
 
-            return await SearchMediaItems(filterCriteria, pageSize, pageToken);
+            GooglePhotosMediaItemsCollection cacheCollection = await SearchMediaItems(searchCriteria, pageSize, pageToken);
+
+            cacheCollection.mediaItems.RemoveAll(m => !m.MimeType.Equals("image/jpeg"));
+
+            return cacheCollection;
         }
         public async Task<GooglePhotosMediaItemsCollection> SearchFavoredPhotos(int pageSize = 0, string pageToken = "")
         {
-            object filterCriteria = new
+            string searchCriteria = JsonConvert.SerializeObject(new
             {
-                mediaTypeFilter = new
+                pageSize = pageSize.ToString(),
+                pageToken = pageToken,
+                filters = new
                 {
-                    mediaTypes = new[] { "PHOTO" }
-                },
-                featureFilter = new
-                {
-                    includedFeatures = new[] { "FAVORITES" }
+                    mediaTypeFilter = new
+                    {
+                        mediaTypes = new[] { "PHOTO" }
+                    },
+                    featureFilter = new
+                    {
+                        includedFeatures = new[] { "FAVORITES" }
+                    }
                 }
-            };
+            });
 
-            return await SearchMediaItems(filterCriteria, pageSize, pageToken);
+            return await SearchMediaItems(searchCriteria, pageSize, pageToken);
         }
-        public async Task<GooglePhotosMediaItemsCollection> SearchMediaItems(object filterCriteria, int pageSize = 0, string pageToken = "")
+        public async Task<GooglePhotosMediaItemsCollection> SearchMediaItems(string searchCriteria, int pageSize = 0, string pageToken = "")
         {
             string url = @"https://photoslibrary.googleapis.com/v1/mediaItems:search";
-
-            string searchCriteria = JsonConvert.SerializeObject(
-                new
-                {
-                    pageSize = pageSize.ToString(),
-                    pageToken = pageToken,
-                    filters = filterCriteria
-                });
 
             StringContent content = new StringContent(searchCriteria);
             

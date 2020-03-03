@@ -2,6 +2,8 @@
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -71,19 +73,14 @@ namespace GooglePhotoWallpaperREST
             SlideshowSettings slideshowSettings = new SlideshowSettings();
             slideshowSettings.displayFavorites = true;
             
-
             int albumCount = 0;
-            string tmpFile = string.Empty;
-
-
             GooglePhotosAlbumsCollection albums = await service.FetchAllAlbums();
 
             foreach (var anAlbum in albums.albums)
             {
                 Console.WriteLine("{0}) {1}", albumCount++, anAlbum.title);
-                slideshowSettings.selectedAlbumIds.Add(anAlbum.id);
+                slideshowSettings.AddSelectedAlbumId(anAlbum.id);
             }
-
 
             int mediaItemCount = 0;
             GooglePhotosMediaItemsCollection medias = await service.FetchAllFavoredPhotos();
@@ -92,7 +89,32 @@ namespace GooglePhotoWallpaperREST
                 Console.WriteLine("{0}) {1}", mediaItemCount++, media.Filename);
             }
 
-            slideshowSettings.SaveSettings();
+            List<GooglePhotosMediaItem> photosToSlideshow = new List<GooglePhotosMediaItem>();
+
+            var sw = Stopwatch.StartNew();
+            Parallel.ForEach(slideshowSettings.selectedAlbumIds, (anAlbumId) =>
+            {
+                photosToSlideshow.AddRange((service.FetchAllPhotosOfAlbum(anAlbumId)).Result.mediaItems);
+            });
+
+            //foreach (var anAlbumId in slideshowSettings.selectedAlbumIds)
+            //{
+            //    photosToSlideshow.AddRange((await service.FetchAllPhotosOfAlbum(anAlbumId)).mediaItems);
+            //}
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds / 1000);
+
+            photosToSlideshow.AddRange((await service.FetchAllFavoredPhotos()).mediaItems);
+
+            foreach (var aPhoto in photosToSlideshow)
+            {
+                //if Album ID is set, filters can't be
+                //https://developers.google.com/photos/library/reference/rest/v1/mediaItems/search
+                Wallpaper.Wallpaper.Set(new Uri(aPhoto.BaseUrl.AbsoluteUri + "=w1600-h900"), slideshowSettings.WallpaperStyle);
+                Thread.Sleep(1000);
+            }
+
+            //slideshowSettings.SaveSettings();
         }
     }
 }
