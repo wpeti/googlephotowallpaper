@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GooglePhotoWallpaperREST
 {
-    class MyGooglePhotosRESTClientService : BaseClientService
+    public class MyGooglePhotosRESTClientService : BaseClientService
     {
         public MyGooglePhotosRESTClientService(Initializer initializer) : base(initializer)
         {
@@ -130,7 +130,7 @@ namespace GooglePhotoWallpaperREST
             return JsonConvert.DeserializeObject<GooglePhotosMediaItemsCollection>(await response.Content.ReadAsStringAsync());
         }
 
-        internal async Task<GooglePhotosAlbumsCollection> FetchAllAlbums()
+        public async Task<GooglePhotosAlbumsCollection> FetchAllAlbums()
         {
             GooglePhotosAlbumsCollection albums = new GooglePhotosAlbumsCollection() { albums = new List<GooglePhotosAlbum>() };
 

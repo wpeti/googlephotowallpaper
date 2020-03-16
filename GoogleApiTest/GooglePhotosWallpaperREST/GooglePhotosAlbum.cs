@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GooglePhotoWallpaperREST
 {
-    class GooglePhotosAlbum
+    public class GooglePhotosAlbum
     {
         public string id { get; set; }
         public string title { get; set; }

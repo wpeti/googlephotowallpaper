@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GooglePhotoWallpaperREST
 {
-    class GooglePhotosMediaItemsCollection : GooglePhotosCollectionBase
+    public class GooglePhotosMediaItemsCollection : GooglePhotosCollectionBase
     {
         public List<GooglePhotosMediaItem> mediaItems { get; set; }
     }

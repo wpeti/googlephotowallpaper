@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GooglePhotoWallpaperREST
 {
-    class GooglePhotosAlbumsCollection
+    public class GooglePhotosAlbumsCollection
     {
         public List<GooglePhotosAlbum> albums { get; set; }
         public string nextPageToken { get; set; }

@@ -23,7 +23,7 @@ namespace GooglePhotoWallpaperREST
     public class Program
     {
         static string[] Scopes = new[] { @"https://www.googleapis.com/auth/photoslibrary.readonly" };
-        private MyGooglePhotosRESTClientService service;
+        public MyGooglePhotosRESTClientService service;
 
         [STAThread]
         static void Main(string[] args)
@@ -48,7 +48,7 @@ namespace GooglePhotoWallpaperREST
             Console.ReadKey();
         }
 
-        private async Task SignInAndInitiateService()
+        public async Task SignInAndInitiateService()
         {
             UserCredential credential;
             using (var stream = new FileStream("creds.json", FileMode.Open, FileAccess.Read))

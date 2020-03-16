@@ -7,11 +7,46 @@
         mc:Ignorable="d"
         Title="My Google Photos Wallpaper" Height="450" Width="800">
     <Grid  >
-        <Grid x:Name="signin" Visibility="Hidden">
-            <Button x:Name="button" Content="Sign in to Google" HorizontalAlignment="Left" Margin="361,198,0,0" VerticalAlignment="Top" Width="75"/>
+        <Grid x:Name="signin" Visibility="Visible">
+            <TextBlock x:Name="UserInfo" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center">
+                    Sign in to your Google account in the appearing browser window!<LineBreak/>
+                    If the signing in didn't start or you were facing problems, restart this application to start over.
+            </TextBlock>
         </Grid>
+
         <Grid x:Name="signedin" Visibility="Hidden">
-            <Label Content="You are now signed in!" HorizontalAlignment="Left" Margin="334,194,0,0" VerticalAlignment="Top" Width="128"/>
+            <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center">
+                    You are now signed in!<LineBreak/>
+                    Configure how and what to display.
+            </TextBlock>
+
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Label Content="Configure how the content shall be displayed"/>
+                <Label Content="Order by:"/>
+                <StackPanel x:Name="DisplayConfiguratorOrderBy" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <RadioButton GroupName="OrderBy" Content="File name"/>
+                    <RadioButton GroupName="OrderBy" Content="Creation date" IsChecked="True"/>
+                </StackPanel>
+                <Label Content="Order:"/>
+                <StackPanel x:Name="DisplayConfiguratorOrder" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <RadioButton GroupName="Order" Content="Ascending" />
+                    <RadioButton GroupName="Order" Content="Descending" IsChecked="True"/>
+                    <RadioButton GroupName="Order" Content="Random" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Label Content="Select content to view as wallpaper from the below list:"/>
+                <StackPanel x:Name="ContentSelector" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label x:Name="LoadingText">Loading content...</Label>
+                    <ListBox ItemsSource="{Binding ContentSelectorListBoxSource}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSelected}" Content="{Binding AlbumName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
