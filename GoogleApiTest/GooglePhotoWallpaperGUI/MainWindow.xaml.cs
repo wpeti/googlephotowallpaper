@@ -23,6 +23,19 @@ namespace GooglePhotoWallpaperGUI
         public MainWindow()
         {
             InitializeComponent();
+
+            try
+            {
+
+            }
+            catch (AggregateException ex)
+            {
+                Console.WriteLine(ex.ToString());
+                foreach (var e in ex.InnerExceptions)
+                {
+                    Console.WriteLine("ERROR: " + e.Message);
+                }
+            }
         }
     }
 }

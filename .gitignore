@@ -15,3 +15,7 @@
 /GoogleApiTest/GooglePhotoWallpaperGUI/obj/Debug
 /GoogleApiTest/Wallpaper/bin/Debug/netstandard2.0
 /GoogleApiTest/Wallpaper/obj
+/GoogleApiTest/GooglePhotosWallpaperREST/obj/Debug
+/GoogleApiTest/GooglePhotosWallpaperREST/bin/Debug
+/GoogleApiTest/packages
+/GoogleApiTest/creds.json

@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GooglePhotoWallpaperGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="My Google Photos Wallpaper" Height="450" Width="800">
+    <Grid  >
+        <Grid x:Name="signin" Visibility="Hidden">
+            <Button x:Name="button" Content="Sign in to Google" HorizontalAlignment="Left" Margin="361,198,0,0" VerticalAlignment="Top" Width="75"/>
+        </Grid>
+        <Grid x:Name="signedin" Visibility="Hidden">
+            <Label Content="You are now signed in!" HorizontalAlignment="Left" Margin="334,194,0,0" VerticalAlignment="Top" Width="128"/>
+        </Grid>
     </Grid>
 </Window>
