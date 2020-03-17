@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace GooglePhotoWallpaperREST
 {
-    class SlideshowSettings
+    public class SlideshowSettings
     {
         private readonly string settingsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SlideshowSettings");
 
@@ -42,15 +42,23 @@ namespace GooglePhotoWallpaperREST
                 selectedAlbumIds.Add(anAlbumId);
             }
         }
+
+        public void RemoveSelectedAlbumId(string anAlbumId)
+        {
+            if (selectedAlbumIds.Contains(anAlbumId))
+            {
+                selectedAlbumIds.RemoveAll(id => id.Equals(anAlbumId));
+            }
+        }
     }
 
-    enum OrderBy
+    public enum OrderBy
     {
         DateTime,
         FileName
     }
 
-    enum Order
+    public enum Order
     {
         Ascending,
         Descending,

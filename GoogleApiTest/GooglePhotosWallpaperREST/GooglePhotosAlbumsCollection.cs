@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace GooglePhotoWallpaperREST
 {
     public class GooglePhotosAlbumsCollection
     {
-        public List<GooglePhotosAlbum> albums { get; set; }
+        public ObservableCollection<GooglePhotosAlbum> albums { get; set; }
         public string nextPageToken { get; set; }
 
     }

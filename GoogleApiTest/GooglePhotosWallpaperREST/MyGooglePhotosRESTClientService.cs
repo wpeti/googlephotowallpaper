@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -132,7 +133,7 @@ namespace GooglePhotoWallpaperREST
 
         public async Task<GooglePhotosAlbumsCollection> FetchAllAlbums()
         {
-            GooglePhotosAlbumsCollection albums = new GooglePhotosAlbumsCollection() { albums = new List<GooglePhotosAlbum>() };
+            GooglePhotosAlbumsCollection albums = new GooglePhotosAlbumsCollection() { albums = new ObservableCollection<GooglePhotosAlbum>() };
 
             GooglePhotosAlbumsCollection albumsCache = new GooglePhotosAlbumsCollection();
 
@@ -140,7 +141,11 @@ namespace GooglePhotoWallpaperREST
             {
                 albumsCache = await FetchAlbums(albumsCache.nextPageToken);
 
-                albums.albums.AddRange(albumsCache.albums);
+                foreach (var item in albumsCache.albums)
+                {
+                    albums.albums.Add(item);
+                }
+
                 albums.nextPageToken = albumsCache.nextPageToken;
             }
             while (!string.IsNullOrEmpty(albumsCache.nextPageToken));

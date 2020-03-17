@@ -24,27 +24,29 @@
                 <Label Content="Configure how the content shall be displayed"/>
                 <Label Content="Order by:"/>
                 <StackPanel x:Name="DisplayConfiguratorOrderBy" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <RadioButton GroupName="OrderBy" Content="File name"/>
-                    <RadioButton GroupName="OrderBy" Content="Creation date" IsChecked="True"/>
+                    <RadioButton GroupName="OrderBy" Name="FileName" Content="File name" Checked="OrderBySelected"/>
+                    <RadioButton GroupName="OrderBy" Name="DateTime" Content="Creation date" Checked="OrderBySelected" IsChecked="True"/>
                 </StackPanel>
                 <Label Content="Order:"/>
+                
                 <StackPanel x:Name="DisplayConfiguratorOrder" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <RadioButton GroupName="Order" Content="Ascending" />
-                    <RadioButton GroupName="Order" Content="Descending" IsChecked="True"/>
-                    <RadioButton GroupName="Order" Content="Random" />
+                    <RadioButton GroupName="Order" Content="Ascending" Checked="OrderSelected"/>
+                    <RadioButton GroupName="Order" Content="Descending" Checked="OrderSelected" IsChecked="True"/>
+                    <RadioButton GroupName="Order" Content="Random" Checked="OrderSelected"/>
                 </StackPanel>
+                
             </StackPanel>
             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Label Content="Select content to view as wallpaper from the below list:"/>
                 <StackPanel x:Name="ContentSelector" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Label x:Name="LoadingText">Loading content...</Label>
                     <ListBox ItemsSource="{Binding ContentSelectorListBoxSource}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSelected}" Content="{Binding AlbumName}" />
+                                <CheckBox Checked="AnAlbumSelected" IsChecked="{Binding IsSelected}" Unchecked="AnAlbumDeSelected" Content="{Binding title}" Uid="{Binding id}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    <Label x:Name="LoadingText">Loading albums...</Label>
                 </StackPanel>
             </StackPanel>
         </Grid>

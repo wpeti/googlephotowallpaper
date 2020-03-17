@@ -12,5 +12,7 @@ namespace GooglePhotoWallpaperREST
         public int mediaItemsCount { get; set; }
         public string coverPhotoBaseUrl { get; set; }
         public string coverPhotoMediaItemId { get; set; }
+        public bool IsSelected { get; set; }
+
     }
 }

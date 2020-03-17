@@ -22,9 +22,21 @@ namespace GooglePhotoWallpaperGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ObservableCollection<BoolTextClass> ContentSelectorListBoxSource { get; set; }
+        public ObservableCollection<GooglePhotosAlbum> ContentSelectorListBoxSource { get; set; }
 
         Program prog;
+
+        private SlideshowSettings slideshowSettings;
+
+        public SlideshowSettings SlideshowSettings
+        {
+            get
+            {
+                if (slideshowSettings == null) slideshowSettings = new SlideshowSettings();
+                return slideshowSettings;
+            }
+        }
+
 
         public MainWindow()
         {
@@ -71,16 +83,19 @@ namespace GooglePhotoWallpaperGUI
             signin.Visibility = Visibility.Hidden;
             signedin.Visibility = Visibility.Visible;
 
-            ContentSelectorListBoxSource = new ObservableCollection<BoolTextClass>();
-            ContentSelectorListBoxSource.Add(new BoolTextClass { AlbumName = "Favorite Pictures", AlbumId = "favPic", IsSelected = true});
+            ContentSelectorListBoxSource = new ObservableCollection<GooglePhotosAlbum>();
+            ContentSelectorListBoxSource.Add(new GooglePhotosAlbum { title = "Favorite Pictures", id = "favPic", IsSelected = true });
+            SlideshowSettings.AddSelectedAlbumId(ContentSelectorListBoxSource[0].id);
+            this.DataContext = this;
+
             GooglePhotosAlbumsCollection albums = await prog.service.FetchAllAlbums();
-            
+
             foreach (var anAlbum in albums.albums)
             {
-                ContentSelectorListBoxSource.Add(new BoolTextClass { AlbumName = anAlbum.title, AlbumId= anAlbum.id});
+                ContentSelectorListBoxSource.Add(anAlbum);
             }
+
             LoadingText.Visibility = Visibility.Collapsed;
-            this.DataContext = this;
 
             //DisplayConfiguratorOrderBy.Children.Add(new RadioButton() { GroupName = "OrderBy", Content = "File name" });
             //DisplayConfiguratorOrderBy.Children.Add(new RadioButton() { GroupName = "OrderBy", Content = "Creation date", IsChecked = true });
@@ -90,6 +105,35 @@ namespace GooglePhotoWallpaperGUI
             //DisplayConfiguratorOrder.Children.Add(new RadioButton() { GroupName = "Order", Content = "Random" });
 
 
+        }
+
+
+        private void OrderSelected(object sender, RoutedEventArgs e)
+        {
+            RadioButton aRadioButton = sender as RadioButton;
+
+            if (aRadioButton.Content.ToString().Equals(Order.Ascending.ToString())) SlideshowSettings.order = Order.Ascending;
+            else if (aRadioButton.Content.ToString().Equals(Order.Descending.ToString())) SlideshowSettings.order = Order.Descending;
+            else if (aRadioButton.Content.ToString().Equals(Order.Random.ToString())) SlideshowSettings.order = Order.Random;
+        }
+
+        private void OrderBySelected(object sender, RoutedEventArgs e)
+        {
+            RadioButton aRadioButton = sender as RadioButton;
+
+            if (aRadioButton.Name.ToString().Equals(OrderBy.DateTime.ToString())) SlideshowSettings.orderBy = OrderBy.DateTime;
+            else if (aRadioButton.Name.ToString().Equals(OrderBy.FileName.ToString())) SlideshowSettings.orderBy = OrderBy.FileName;
+            
+        }
+
+        private void AnAlbumSelected(object sender, RoutedEventArgs e)
+        {
+            SlideshowSettings.AddSelectedAlbumId((sender as CheckBox).Uid);
+        }
+
+        private void AnAlbumDeSelected(object sender, RoutedEventArgs e)
+        {
+            SlideshowSettings.RemoveSelectedAlbumId((sender as CheckBox).Uid);
         }
     }
 }
